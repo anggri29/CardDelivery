@@ -28,7 +28,7 @@ public class CardDeliveryTest {
     private String getFutureDate(int daysToAdd) {
         LocalDate currentDate = LocalDate.now();
         LocalDate futureDate = currentDate.plusDays(daysToAdd);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         String formattedDate = futureDate.format(formatter);
         return formattedDate;
     }
@@ -38,10 +38,10 @@ public class CardDeliveryTest {
         $("[data-test-id=city] input").setValue("Москва");
         $("[data-test-id=date] input").setValue(getFutureDate(3));
         $("[data-test-id=name] input").setValue("Григорян Ангелина");
-        $("[data-test-id=phone] input").setValue("+792508815");
+        $("[data-test-id=phone] input").setValue("+79250881558");
         $("[data-test-id=agreement]").click();
         $("button").click();
 
-        $(withText(" Успешно!")).shouldBe(Condition.hidden, Duration.ofSeconds(15));
+        $(withText(" Встреча успешно забронирована на " + getFutureDate(3))).shouldBe(Condition.hidden, Duration.ofSeconds(15));
     }
 }
