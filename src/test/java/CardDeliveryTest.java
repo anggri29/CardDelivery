@@ -1,6 +1,4 @@
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
@@ -18,26 +16,28 @@ public class CardDeliveryTest {
         open("http://localhost:9999/");
     }
 
-    private String getPlanningDate() {
-        SelenideElement dateInput = $("[data-test-id='date'] input");
-        dateInput.sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
+
+
+    private String planningDate(int daysToAdd) {
         LocalDate currentDate = LocalDate.now();
+        LocalDate futureDate = currentDate.plusDays(daysToAdd);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        String planningDate = currentDate.format(formatter);
-        return planningDate;
+        String formattedDate = futureDate.format(formatter);
+        return formattedDate;
     }
-    
+
     @Test
     public void shouldTest() {
         $("[data-test-id=city] input").setValue("Москва");
-        String planningDate = getPlanningDate();
-        $("[data-test-id='date'] input").setValue(planningDate);
+
+        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
+        $("[data-test-id='date'] input").setValue(planningDate(3));
         $("[data-test-id=name] input").setValue("Григорян Ангелина");
         $("[data-test-id=phone] input").setValue("+79250881558");
         $("[data-test-id=agreement]").click();
         $("button").click();
         $(".notification__content")
-                .shouldHave(Condition.text("Встреча успешно забронирована на " + planningDate), Duration.ofSeconds(15))
+                .shouldHave(Condition.text("Встреча успешно забронирована на " + planningDate(3)), Duration.ofSeconds(15))
                 .shouldBe(Condition.visible);
     }
 }
