@@ -16,8 +16,6 @@ public class CardDeliveryTest {
         open("http://localhost:9999/");
     }
 
-
-
     private String planningDate(int daysToAdd) {
         LocalDate currentDate = LocalDate.now();
         LocalDate futureDate = currentDate.plusDays(daysToAdd);
@@ -35,7 +33,7 @@ public class CardDeliveryTest {
         $("[data-test-id=name] input").setValue("Григорян Ангелина");
         $("[data-test-id=phone] input").setValue("+79250881558");
         $("[data-test-id=agreement]").click();
-        $("button").click();
+        $(".button").click();
         $(".notification__content")
                 .shouldHave(Condition.text("Встреча успешно забронирована на " + planningDate(3)), Duration.ofSeconds(15))
                 .shouldBe(Condition.visible);
